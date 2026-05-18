@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dang nhap | Milktea House</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tea: "#0f766e",
+            cream: "#fff8ea",
+            berry: "#be123c"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-cream text-slate-900">
+  <header class="border-b border-teal-900/10 bg-white">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <a href="/login" class="text-xl font-black text-tea">Milktea House</a>
+      <a href="index.html" class="text-sm font-semibold text-slate-600 hover:text-tea">Trang chu</a>
+    </div>
+  </header>
+
+  <main class="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[420px_1fr] lg:px-8">
+    <section class="order-2 min-h-[360px] overflow-hidden rounded-lg bg-slate-950 lg:order-1">
+      <img class="h-full min-h-[360px] w-full object-cover opacity-80" src="https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=1200&q=80" alt="Tra sua tran chau" />
+    </section>
+
+    <section class="order-1 lg:order-2">
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <form id="loginForm" class="auth-panel space-y-4" data-auth-panel="login">
+          <h1 class="text-2xl font-black">Dang nhap</h1>
+          <div>
+            <label for="loginEmail" class="text-sm font-semibold text-slate-700">Email</label>
+            <input id="loginEmail" type="email" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" required />
+          </div>
+          <div>
+            <label for="loginPassword" class="text-sm font-semibold text-slate-700">Mat khau</label>
+            <input id="loginPassword" type="password" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" required />
+          </div>
+          <button class="w-full rounded-md bg-tea px-5 py-3 font-semibold text-white transition hover:bg-teal-800" type="submit">Dang nhap</button>
+          <div class="space-y-2 text-center text-sm text-slate-600">
+            <p>
+              Bạn chưa có tài khoản?
+              <a class="font-semibold text-tea hover:text-teal-800" href="/register" data-auth-link="register">Đăng ký</a>
+            </p>
+            <a class="font-semibold text-berry hover:text-rose-700" href="/forgot-password" data-auth-link="forgot">Quên mật khẩu</a>
+          </div>
+          <p id="loginMessage" class="hidden rounded-md px-4 py-3 text-sm"></p>
+        </form>
+
+        <form id="registerForm" class="auth-panel hidden space-y-4" data-auth-panel="register">
+          <h1 class="text-2xl font-black">Tao tai khoan</h1>
+          <div>
+            <label for="registerName" class="text-sm font-semibold text-slate-700">Ho ten</label>
+            <input id="registerName" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" required />
+          </div>
+          <div>
+            <label for="registerEmail" class="text-sm font-semibold text-slate-700">Email</label>
+            <input id="registerEmail" type="email" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" required />
+          </div>
+          <div>
+            <label for="registerPassword" class="text-sm font-semibold text-slate-700">Mat khau</label>
+            <input id="registerPassword" type="password" minlength="6" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" required />
+          </div>
+          <button class="w-full rounded-md bg-tea px-5 py-3 font-semibold text-white transition hover:bg-teal-800" type="submit">Dang ky</button>
+          <p class="text-center text-sm text-slate-600">
+            Bạn đã có tài khoản?
+            <a class="font-semibold text-tea hover:text-teal-800" href="/login" data-auth-link="login">Đăng nhập</a>
+          </p>
+          <p id="registerMessage" class="hidden rounded-md px-4 py-3 text-sm"></p>
+
+        </form>
+
+        <form id="forgotForm" class="auth-panel hidden space-y-4" data-auth-panel="forgot">
+          <h1 class="text-2xl font-black">Quen mat khau</h1>
+          <div>
+            <label for="forgotEmail" class="text-sm font-semibold text-slate-700">Email</label>
+            <input id="forgotEmail" type="email" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" required />
+          </div>
+          <button class="w-full rounded-md bg-tea px-5 py-3 font-semibold text-white transition hover:bg-teal-800" type="submit">Gui ma OTP</button>
+          <p class="text-center text-sm text-slate-600">
+            Ban nho mat khau roi?
+            <a class="font-semibold text-tea hover:text-teal-800" href="/login" data-auth-link="login">Đăng nhập</a>
+          </p>
+          <p id="forgotMessage" class="hidden rounded-md px-4 py-3 text-sm"></p>
+
+        </form>
+
+        <form id="otpForm" class="auth-panel hidden space-y-4" data-auth-panel="otp">
+          <h1 id="otpTitle" class="text-2xl font-black">Nhap ma OTP</h1>
+          <p id="otpHint" class="text-sm text-slate-600"></p>
+          <div id="otpCodeBox">
+            <label for="otpCode" class="text-sm font-semibold text-slate-700">Ma OTP</label>
+            <input id="otpCode" inputmode="numeric" maxlength="6" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" required />
+          </div>
+          <div id="otpPasswordBox" class="hidden">
+            <label for="otpNewPassword" class="text-sm font-semibold text-slate-700">Mat khau moi</label>
+            <input id="otpNewPassword" type="password" minlength="6" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 outline-none ring-tea/20 focus:border-tea focus:ring-4" />
+          </div>
+          <button id="otpSubmitBtn" class="w-full rounded-md bg-tea px-5 py-3 font-semibold text-white transition hover:bg-teal-800" type="submit">Xac thuc</button>
+          <button id="resendOtpBtn" class="w-full rounded-md border border-tea px-5 py-3 font-semibold text-tea transition hover:bg-teal-50" type="button">Gui lai ma OTP</button>
+          <p class="text-center text-sm text-slate-600">
+            <a id="otpBackLink" class="font-semibold text-tea hover:text-teal-800" href="/login" data-auth-link="login">Quay lai dang nhap</a>
+          </p>
+          <p id="otpMessage" class="hidden rounded-md px-4 py-3 text-sm"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>

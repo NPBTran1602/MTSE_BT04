@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milktea House | Trang chu ban tra sua</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tea: "#0f766e",
+            cream: "#fff8ea",
+            berry: "#be123c",
+            honey: "#f59e0b"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-cream text-slate-900">
+  <header class="sticky top-0 z-40 border-b border-teal-900/10 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <a href="index.html" class="text-xl font-black text-tea">Milktea House</a>
+      <nav class="hidden items-center gap-6 text-sm font-semibold text-slate-600 md:flex">
+        <a class="hover:text-tea" href="#khuyen-mai">Khuyen mai</a>
+        <a class="hover:text-tea" href="#san-pham">San pham</a>
+        <a class="hover:text-tea" href="#loc">Tim kiem</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <div id="memberBadge" class="hidden text-right text-xs sm:block"></div>
+        <button id="logoutBtn" class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold hover:border-tea hover:text-tea">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="relative overflow-hidden bg-slate-950">
+      <img class="absolute inset-0 h-full w-full object-cover opacity-55" src="https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?auto=format&fit=crop&w=1600&q=80" alt="Cac ly tra sua nhieu huong vi" />
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent"></div>
+      <div class="relative mx-auto grid min-h-[560px] max-w-7xl items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_420px] lg:px-8">
+        <div class="max-w-2xl text-white">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-teal-200">Tra sua handmade</p>
+          <h1 class="mt-4 text-4xl font-black leading-tight sm:text-6xl">Uu dai thanh vien cho tung ly tra sua hom nay</h1>
+          <p class="mt-5 text-lg leading-8 text-white/80">Cap nhat mon moi, san pham ban chay, so luong ton kho va uu dai theo danh muc. Chon topping, loc theo gia, xem chi tiet roi tang giam so luong ngay tren trang san pham.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#san-pham" class="rounded-md bg-tea px-5 py-3 font-semibold text-white hover:bg-teal-700">Mua ngay</a>
+            <a href="#loc" class="rounded-md bg-white px-5 py-3 font-semibold text-slate-900 hover:bg-teal-50">Tim mon hop vi</a>
+          </div>
+        </div>
+        <aside id="promoPanel" class="rounded-lg border border-white/15 bg-white/95 p-5 shadow-xl"></aside>
+      </div>
+    </section>
+
+    <section id="khuyen-mai" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.16em] text-berry">Khuyen mai</p>
+          <h2 class="mt-2 text-3xl font-black">Deal dang ap dung</h2>
+        </div>
+        <p class="max-w-xl text-sm text-slate-600">Thanh vien dang nhap duoc xem nhanh uu dai, ton kho va muc ban chay truoc khi vao chi tiet.</p>
+      </div>
+      <div id="promoGrid" class="mt-7 grid gap-4 md:grid-cols-3"></div>
+    </section>
+
+    <section class="bg-white py-12">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="space-y-10">
+          <div>
+            <div class="flex items-center justify-between gap-4">
+              <h2 class="text-2xl font-black">Moi nhat</h2>
+              <span class="text-sm font-semibold text-tea">Vua len menu</span>
+            </div>
+            <div id="newProducts" class="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4"></div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between gap-4">
+              <h2 class="text-2xl font-black">Ban chay nhat</h2>
+              <span class="text-sm font-semibold text-berry">Duoc chon nhieu</span>
+            </div>
+            <div id="bestProducts" class="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="loc" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-8 lg:grid-cols-[320px_1fr]">
+        <aside class="h-fit rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-black">Tim kiem va loc</h2>
+            <button id="resetFilters" class="text-sm font-semibold text-tea">Dat lai</button>
+          </div>
+          <div class="mt-5 space-y-5">
+            <div>
+              <label for="searchInput" class="text-sm font-semibold">Tu khoa</label>
+              <input id="searchInput" class="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none ring-tea/20 focus:border-tea focus:ring-4" placeholder="Vi du: matcha, tran chau" />
+            </div>
+            <div>
+              <label for="categoryFilter" class="text-sm font-semibold">Danh muc</label>
+              <select id="categoryFilter" class="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-tea"></select>
+            </div>
+            <div>
+              <label for="toppingFilter" class="text-sm font-semibold">Topping</label>
+              <select id="toppingFilter" class="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-tea"></select>
+            </div>
+            <div>
+              <label for="priceFilter" class="text-sm font-semibold">Khoang gia</label>
+              <select id="priceFilter" class="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-tea">
+                <option value="all">Tat ca</option>
+                <option value="0-35000">Duoi 35.000d</option>
+                <option value="35000-45000">35.000d - 45.000d</option>
+                <option value="45000-999999">Tren 45.000d</option>
+              </select>
+            </div>
+            <div>
+              <label for="stockFilter" class="text-sm font-semibold">Tinh trang</label>
+              <select id="stockFilter" class="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-tea">
+                <option value="all">Tat ca</option>
+                <option value="available">Con hang</option>
+                <option value="low">Sap het</option>
+                <option value="soldout">Het hang</option>
+              </select>
+            </div>
+            <div>
+              <label for="sortFilter" class="text-sm font-semibold">Sap xep</label>
+              <select id="sortFilter" class="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-tea">
+                <option value="featured">Noi bat</option>
+                <option value="priceAsc">Gia tang dan</option>
+                <option value="priceDesc">Gia giam dan</option>
+                <option value="soldDesc">Ban chay</option>
+                <option value="newest">Moi nhat</option>
+              </select>
+            </div>
+          </div>
+        </aside>
+
+        <section id="san-pham">
+          <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <p id="resultCount" class="text-sm font-semibold text-tea"></p>
+              <h2 class="text-3xl font-black">Danh sach tra sua</h2>
+            </div>
+          </div>
+          <div id="productGrid" class="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3"></div>
+          <div id="emptyState" class="mt-6 hidden rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center">
+            <h3 class="text-xl font-bold">Khong tim thay san pham phu hop</h3>
+            <p class="mt-2 text-slate-600">Thu giam bot dieu kien loc hoac dung tu khoa khac.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white py-8">
+    <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+      <p class="font-semibold text-slate-900">Milktea House</p>
+      <p>Hotline: 0909 888 777 - Giao nhanh trong 30 phut</p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

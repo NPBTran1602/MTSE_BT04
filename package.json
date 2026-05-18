@@ -1,0 +1,15 @@
+{
+  "name": "milktea-house-api-ui",
+  "version": "1.0.0",
+  "description": "Shop tra sua co API va UI Tailwind",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "mongoose": "^8.8.3",
+    "nodemailer": "^6.9.16"
+  }
+}
