@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema(
     oldPrice: { type: Number, default: 0, min: 0 },
     stock: { type: Number, default: 0, min: 0 },
     sold: { type: Number, default: 0, min: 0 },
+    views: { type: Number, default: 0, min: 0 },
     isNew: { type: Boolean, default: false },
     promotion: { type: String, default: "" },
     toppings: [{ type: String, trim: true }],

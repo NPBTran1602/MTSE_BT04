@@ -1,6 +1,13 @@
 const API_BASE = "";
 let productsCache = [];
 
+// ===== THÊM MỚI: biến trạng thái lazy load =====
+let currentPage = 1;
+let totalPages = 1;
+let isLoadingProducts = false;
+let lazyObserver = null;
+// ===== KẾT THÚC THÊM MỚI =====
+
 const currency = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
 
 async function api(path, options = {}) {
@@ -305,6 +312,45 @@ function initAuth() {
   });
 }
 
+function initHorizontalPagination(gridId, prevBtnId, nextBtnId, pageInfoId, products, perPage = 4) {
+  let page = 0;
+  const totalPgs = Math.ceil(products.length / perPage);
+  const grid = document.getElementById(gridId);
+  const prevBtn = document.getElementById(prevBtnId);
+  const nextBtn = document.getElementById(nextBtnId);
+  const pageInfo = document.getElementById(pageInfoId);
+
+  function render() {
+    const start = page * perPage;
+    const slice = products.slice(start, start + perPage);
+    grid.innerHTML = slice.map((p, i) => {
+      const rank = start + i + 1;
+      return `
+        <div class="relative">
+          <span class="absolute left-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white shadow">${rank}</span>
+          ${productCard(p)}
+        </div>
+      `;
+    }).join("");
+    pageInfo.textContent = `${page + 1} / ${totalPgs}`;
+    prevBtn.disabled = page === 0;
+    nextBtn.disabled = page >= totalPgs - 1;
+  }
+
+  prevBtn.addEventListener("click", () => { if (page > 0) { page--; render(); } });
+  nextBtn.addEventListener("click", () => { if (page < totalPgs - 1) { page++; render(); } });
+
+  if (products.length === 0) {
+    grid.innerHTML = `<p class="col-span-4 text-sm text-slate-500">Chua co du lieu.</p>`;
+    pageInfo.textContent = "0 / 0";
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    return;
+  }
+
+  render();
+}
+
 async function initHome(member) {
   if (!document.getElementById("productGrid")) return;
 
@@ -332,13 +378,16 @@ async function initHome(member) {
   document.getElementById("newProducts").innerHTML = home.newest.map((p) => productCard(p)).join("");
   document.getElementById("bestProducts").innerHTML = home.bestSellers.map((p) => productCard(p)).join("");
 
+  initHorizontalPagination("topSellersGrid", "topSellersPrev", "topSellersNext", "topSellersPageInfo", home.topSellers);
+  initHorizontalPagination("mostViewedGrid", "mostViewedPrev", "mostViewedNext", "mostViewedPageInfo", home.mostViewed);
+
   const categoryFilter = document.getElementById("categoryFilter");
   const toppingFilter = document.getElementById("toppingFilter");
   categoryFilter.innerHTML = ["all", ...meta.categories].map((item) => `<option value="${item}">${item === "all" ? "Tat ca danh muc" : item}</option>`).join("");
   toppingFilter.innerHTML = ["all", ...meta.toppings].map((item) => `<option value="${item}">${item === "all" ? "Tat ca topping" : item}</option>`).join("");
 
   const filterIds = ["searchInput", "categoryFilter", "toppingFilter", "priceFilter", "stockFilter", "sortFilter"];
-  filterIds.forEach((id) => document.getElementById(id).addEventListener("input", renderFilteredProducts));
+  filterIds.forEach((id) => document.getElementById(id).addEventListener("input", resetAndRenderProducts));
   document.getElementById("resetFilters").addEventListener("click", () => {
     document.getElementById("searchInput").value = "";
     categoryFilter.value = "all";
@@ -346,13 +395,14 @@ async function initHome(member) {
     document.getElementById("priceFilter").value = "all";
     document.getElementById("stockFilter").value = "all";
     document.getElementById("sortFilter").value = "featured";
-    renderFilteredProducts();
+    resetAndRenderProducts();
   });
 
-  await renderFilteredProducts();
+  setupLazyLoad();
+  await resetAndRenderProducts();
 }
 
-function buildProductQuery() {
+function buildProductQuery(page = 1) {
   const params = new URLSearchParams();
   const keyword = document.getElementById("searchInput").value.trim();
   const category = document.getElementById("categoryFilter").value;
@@ -371,16 +421,55 @@ function buildProductQuery() {
     params.set("priceMin", priceMin);
     params.set("priceMax", priceMax);
   }
+  params.set("page", page);
+  params.set("limit", 8);
   return params.toString();
 }
 
-async function renderFilteredProducts() {
-  const query = buildProductQuery();
-  const data = await api(`/api/products${query ? `?${query}` : ""}`);
-  productsCache = data.products;
-  document.getElementById("productGrid").innerHTML = productsCache.map((product) => productCard(product)).join("");
-  document.getElementById("resultCount").textContent = `${data.total} san pham phu hop`;
-  document.getElementById("emptyState").classList.toggle("hidden", data.total > 0);
+async function loadProductsPage(page) {
+  if (isLoadingProducts) return;
+  isLoadingProducts = true;
+  const spinner = document.getElementById("loadMoreSpinner");
+  if (spinner) spinner.classList.remove("hidden");
+  try {
+    const query = buildProductQuery(page);
+    const data = await api(`/api/products?${query}`);
+    totalPages = data.totalPages;
+    currentPage = data.page;
+    const grid = document.getElementById("productGrid");
+    if (page === 1) {
+      productsCache = data.products;
+      grid.innerHTML = productsCache.map((product) => productCard(product)).join("");
+      document.getElementById("resultCount").textContent = `${data.total} san pham phu hop`;
+      document.getElementById("emptyState").classList.toggle("hidden", data.total > 0);
+    } else {
+      productsCache = [...productsCache, ...data.products];
+      grid.insertAdjacentHTML("beforeend", data.products.map((product) => productCard(product)).join(""));
+    }
+  } finally {
+    isLoadingProducts = false;
+    if (spinner) spinner.classList.add("hidden");
+  }
+}
+
+function setupLazyLoad() {
+  if (lazyObserver) lazyObserver.disconnect();
+  const sentinel = document.getElementById("loadMoreSentinel");
+  if (!sentinel) return;
+  lazyObserver = new IntersectionObserver(async (entries) => {
+    if (entries[0].isIntersecting && !isLoadingProducts && currentPage < totalPages) {
+      await loadProductsPage(currentPage + 1);
+    }
+  }, { rootMargin: "200px" });
+  lazyObserver.observe(sentinel);
+}
+
+async function resetAndRenderProducts() {
+  currentPage = 1;
+  totalPages = 1;
+  productsCache = [];
+  document.getElementById("productGrid").innerHTML = "";
+  await loadProductsPage(1);
 }
 
 async function initDetail() {

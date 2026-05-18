@@ -139,9 +139,7 @@ async function handleApi(req, res, url) {
     if (existed && existed.isVerified) {
       return sendJson(res, 409, { message: "Email nay da duoc dang ky." });
     }
-    assertEmailConfigured();
-
-    const otpCode = generateOtp();
+        const otpCode = generateOtp();
     const passwordHash = await hashPassword(password);
     const member = existed || new Member({ email: cleanEmail });
     member.name = cleanName;
@@ -155,8 +153,11 @@ async function handleApi(req, res, url) {
     member.otpExpiresAt = otpExpiry();
     await member.save();
 
-    await sendOtpEmail(cleanEmail, otpCode, "register");
-    return sendJson(res, 201, { message: "Da gui ma OTP dang ky ve Gmail cua ban." });
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await sendOtpEmail(cleanEmail, otpCode, "register");
+      return sendJson(res, 201, { message: "Da gui ma OTP dang ky ve Gmail cua ban." });
+    }
+    return sendJson(res, 201, { message: `Ma OTP cua ban la: ${otpCode}` });
   }
 
   if (req.method === "POST" && url.pathname === "/api/verify-register") {
@@ -185,16 +186,17 @@ async function handleApi(req, res, url) {
     if (!member) {
       return sendJson(res, 404, { message: "Khong tim thay tai khoan voi email nay." });
     }
-    assertEmailConfigured();
-
-    const otpCode = generateOtp();
+        const otpCode = generateOtp();
     member.otpCode = otpCode;
     member.otpPurpose = "reset-password";
     member.otpExpiresAt = otpExpiry();
     await member.save();
 
-    await sendOtpEmail(cleanEmail, otpCode, "reset-password");
-    return sendJson(res, 200, { message: "Da gui ma OTP dat lai mat khau ve Gmail cua ban." });
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await sendOtpEmail(cleanEmail, otpCode, "reset-password");
+      return sendJson(res, 200, { message: "Da gui ma OTP dat lai mat khau ve Gmail cua ban." });
+    }
+    return sendJson(res, 200, { message: `Ma OTP cua ban la: ${otpCode}` });
   }
 
   if (req.method === "POST" && url.pathname === "/api/resend-otp") {
@@ -218,14 +220,16 @@ async function handleApi(req, res, url) {
       return sendJson(res, 404, { message });
     }
 
-    assertEmailConfigured();
-    const otpCode = generateOtp();
+        const otpCode = generateOtp();
     member.otpCode = otpCode;
     member.otpExpiresAt = otpExpiry();
     await member.save();
 
-    await sendOtpEmail(cleanEmail, otpCode, cleanPurpose);
-    return sendJson(res, 200, { message: "Da gui lai ma OTP moi. Ma co hieu luc trong 5 phut." });
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await sendOtpEmail(cleanEmail, otpCode, cleanPurpose);
+      return sendJson(res, 200, { message: "Da gui lai ma OTP moi. Ma co hieu luc trong 5 phut." });
+    }
+    return sendJson(res, 200, { message: `Ma OTP moi cua ban la: ${otpCode}` });
   }
 
   if (req.method === "POST" && url.pathname === "/api/verify-reset-otp") {
@@ -278,24 +282,41 @@ async function handleApi(req, res, url) {
     return sendJson(res, 200, { categories, toppings });
   }
 
-  if (req.method === "GET" && url.pathname === "/api/home") {
-    const [promotions, newest, bestSellers] = await Promise.all([
+    if (req.method === "GET" && url.pathname === "/api/home") {
+    const [promotions, newest, bestSellers, topSellers, mostViewed] = await Promise.all([
       Product.find({}).limit(3),
       Product.find({ isNew: true }).limit(4),
-      Product.find({}).sort({ sold: -1 }).limit(4)
+      Product.find({}).sort({ sold: -1 }).limit(4),
+      Product.find({}).sort({ sold: -1 }).limit(10),
+      Product.find({}).sort({ views: -1 }).limit(10)
     ]);
     return sendJson(res, 200, {
       promotions: promotions.map(cleanProduct),
       newest: newest.map(cleanProduct),
-      bestSellers: bestSellers.map(cleanProduct)
+      bestSellers: bestSellers.map(cleanProduct),
+      topSellers: topSellers.map(cleanProduct),
+      mostViewed: mostViewed.map(cleanProduct)
     });
   }
 
-  if (req.method === "GET" && url.pathname === "/api/products") {
+    if (req.method === "GET" && url.pathname === "/api/products") {
     const sort = String(url.searchParams.get("sort") || "featured");
+    const page = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10));
+    const limit = Math.min(50, Math.max(1, parseInt(url.searchParams.get("limit") || "8", 10)));
+    const skip = (page - 1) * limit;
     const query = buildProductQuery(url.searchParams);
-    const data = await Product.find(query).sort(productSort(sort));
-    return sendJson(res, 200, { total: data.length, products: data.map(cleanProduct) });
+    const [total, data] = await Promise.all([
+      Product.countDocuments(query),
+      Product.find(query).sort(productSort(sort)).skip(skip).limit(limit)
+    ]);
+    const totalPages = Math.ceil(total / limit);
+    return sendJson(res, 200, {
+      total,
+      page,
+      totalPages,
+      hasMore: page < totalPages,
+      products: data.map(cleanProduct)
+    });
   }
 
   const productMatch = url.pathname.match(/^\/api\/products\/([^/]+)(\/related)?$/);
@@ -311,8 +332,8 @@ async function handleApi(req, res, url) {
       return sendJson(res, 200, { products: sameCategory.concat(fillMore).map(cleanProduct) });
     }
 
-    return sendJson(res, 200, { product: cleanProduct(product) });
-  }
+    await Product.findByIdAndUpdate(product._id, { $inc: { views: 1 } });
+    return sendJson(res, 200, { product: cleanProduct(product) });  }
 
   return sendJson(res, 404, { message: "API khong ton tai" });
 }

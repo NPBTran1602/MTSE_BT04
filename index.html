@@ -86,6 +86,42 @@
       </div>
     </section>
 
+    <!-- ===== THÊM MỚI: Top 10 Ban chay & Xem nhiều ===== -->
+    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="space-y-12">
+        <div>
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-bold uppercase tracking-[0.16em] text-berry">Top 10</p>
+              <h2 class="mt-1 text-2xl font-black">San pham ban chay nhat</h2>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="topSellersPrev" class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-600 hover:border-tea hover:text-tea disabled:opacity-30">&#8592;</button>
+              <span id="topSellersPageInfo" class="min-w-[4rem] text-center text-sm font-semibold text-slate-600"></span>
+              <button id="topSellersNext" class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-600 hover:border-tea hover:text-tea disabled:opacity-30">&#8594;</button>
+            </div>
+          </div>
+          <div id="topSellersGrid" class="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4"></div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-bold uppercase tracking-[0.16em] text-tea">Top 10</p>
+              <h2 class="mt-1 text-2xl font-black">San pham xem nhieu nhat</h2>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="mostViewedPrev" class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-600 hover:border-tea hover:text-tea disabled:opacity-30">&#8592;</button>
+              <span id="mostViewedPageInfo" class="min-w-[4rem] text-center text-sm font-semibold text-slate-600"></span>
+              <button id="mostViewedNext" class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-600 hover:border-tea hover:text-tea disabled:opacity-30">&#8594;</button>
+            </div>
+          </div>
+          <div id="mostViewedGrid" class="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4"></div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== KẾT THÚC THÊM MỚI ===== -->
+
     <section id="loc" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div class="grid gap-8 lg:grid-cols-[320px_1fr]">
         <aside class="h-fit rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
@@ -149,6 +185,17 @@
             <h3 class="text-xl font-bold">Khong tim thay san pham phu hop</h3>
             <p class="mt-2 text-slate-600">Thu giam bot dieu kien loc hoac dung tu khoa khac.</p>
           </div>
+          <!-- ===== THÊM MỚI: Lazy load sentinel ===== -->
+          <div id="loadMoreSentinel" class="mt-6 flex justify-center py-4">
+            <div id="loadMoreSpinner" class="hidden items-center gap-2 text-sm font-semibold text-slate-500 flex">
+              <svg class="h-5 w-5 animate-spin text-tea" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+              </svg>
+              Dang tai them san pham...
+            </div>
+          </div>
+          <!-- ===== KẾT THÚC THÊM MỚI ===== -->
         </section>
       </div>
     </section>
