@@ -28,8 +28,8 @@ const products = [
     ]
   },
   {
-    id: "matcha-latte-dau-do",
-    name: "Matcha latte dau do",
+    id: "matcha-latte",
+    name: "Matcha latte",
     category: "Tra sua nhat ban",
     price: 45000,
     oldPrice: 52000,
@@ -38,11 +38,9 @@ const products = [
     isNew: true,
     promotion: "Mua 2 tang 1 topping",
     toppings: ["Dau do", "Thach matcha"],
-    description: "Matcha thanh nhe ket hop sua tuoi va dau do ngot bui, hop voi nguoi thich vi tra ro.",
+    description: "Matcha thanh nhe ket hop sua tuoi, hop voi nguoi thich vi tra ro.",
     images: [
-      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=1200&q=80"
-    ]
+      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=1200&q=80"    ]
   },
   {
     id: "oolong-sua-kem-cheese",
@@ -57,8 +55,7 @@ const products = [
     toppings: ["Kem cheese", "Thach tra"],
     description: "Nen oolong rang thom, vi sua vua phai va lop kem cheese man beo can bang.",
     images: [
-      "https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1200&q=80"
+      "/assets/images/products/oolongkemcheese.jpg"
     ]
   },
   {
@@ -74,8 +71,7 @@ const products = [
     toppings: ["Tran chau trang", "Thach pho mai"],
     description: "Khoai mon beo thom, mau tim nhe va hau vi sua mem, de uong ca ngay.",
     images: [
-      "https://images.unsplash.com/photo-1622766815178-641bef2b4630?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=1200&q=80"
+      "/assets/images/products/trasuakhoaimon.jpg"
     ]
   },
   {
@@ -91,8 +87,7 @@ const products = [
     toppings: ["Tran chau den", "Pudding trung"],
     description: "Hong tra dam vi, sua beo nhe va tran chau deo, mon nen tang cua moi menu tra sua.",
     images: [
-      "https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?auto=format&fit=crop&w=1200&q=80"
+      "/assets/images/products/hongtrasuatranchau.jpg",
     ]
   },
   {
@@ -108,8 +103,7 @@ const products = [
     toppings: ["Cookie crumb", "Kem cheese"],
     description: "Socola thom dam, cookie gion nhe va sua tuoi, hop khau vi thich ngot beo.",
     images: [
-      "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=1200&q=80"
     ]
   },
   {
@@ -125,8 +119,7 @@ const products = [
     toppings: ["Dao mieng", "Kem macchiato"],
     description: "Tra dao tuoi mat phu macchiato beo nhe, vua giai khat vua co vi sua mem.",
     images: [
-      "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1200&q=80"
+      "/assets/images/products/trasuadaomacchiato.jpg"
     ]
   },
   {
@@ -142,8 +135,7 @@ const products = [
     toppings: ["Tran chau den", "Foam sua"],
     description: "Sua tuoi lanh ket hop tran chau duong den nong, tao vi caramel thom ro.",
     images: [
-      "https://images.unsplash.com/photo-1622621746668-59fb299bc4d7?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?auto=format&fit=crop&w=1200&q=80"
+      "/assets/images/products/trasuatranchauđuongen.jpg"
     ]
   }
 ];
